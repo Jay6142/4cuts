@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Konva from 'konva'
 import dynamic from 'next/dynamic'
-import LayoutSelector from '@/components/decorate/LayoutSelector'
+import BackgroundSelector from '@/components/settings/BackgroundSelector'
 import StickerPanel from '@/components/decorate/StickerPanel'
 import DownloadButton from '@/components/decorate/DownloadButton'
 import { useAppStore } from '@/store'
@@ -66,8 +66,7 @@ export default function DecoratePage() {
         {/* 컨트롤 패널 */}
         <div className="flex flex-col gap-4 lg:w-64 w-full">
           <div className="bg-white rounded-2xl p-4 shadow-sm">
-            <p className="text-sm font-semibold text-gray-700 mb-2">레이아웃</p>
-            <LayoutSelector />
+            <BackgroundSelector />
           </div>
 
           <StickerPanel canvasWidth={canvasW} canvasHeight={canvasH} />

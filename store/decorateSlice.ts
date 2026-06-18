@@ -1,8 +1,7 @@
 import { StateCreator } from 'zustand'
-import { DecorateState, PhotoLayoutType, PlacedSticker } from '@/types/decorate'
+import { DecorateState, PlacedSticker } from '@/types/decorate'
 
 export interface DecorateSlice extends DecorateState {
-  setLayout: (layout: PhotoLayoutType) => void
   addSticker: (sticker: PlacedSticker) => void
   updateSticker: (instanceId: string, updates: Partial<PlacedSticker>) => void
   removeSticker: (instanceId: string) => void
@@ -11,10 +10,8 @@ export interface DecorateSlice extends DecorateState {
 }
 
 export const createDecorateSlice: StateCreator<DecorateSlice> = (set) => ({
-  layout: '2x2',
   stickers: [],
   selectedStickerInstanceId: null,
-  setLayout: (layout) => set({ layout }),
   addSticker: (sticker) =>
     set((state) => ({ stickers: [...state.stickers, sticker] })),
   updateSticker: (instanceId, updates) =>

@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import Image from 'next/image'
 import { clsx } from 'clsx'
 import { useCamera } from '@/hooks/useCamera'
@@ -37,7 +36,15 @@ export default function CapturePage() {
     <main className="h-screen bg-gray-900 flex flex-col overflow-hidden">
       {/* 헤더 */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 shrink-0">
-        <Link href="/settings" className="text-gray-400 hover:text-white text-xl px-1">←</Link>
+        <button
+          onClick={() => {
+            clearPhotos()
+            router.push('/settings')
+          }}
+          className="text-gray-400 hover:text-white text-xl px-1"
+        >
+          ←
+        </button>
         <h1 className="text-white font-semibold text-sm">촬영</h1>
         <button
           onClick={clearPhotos}

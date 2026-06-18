@@ -20,10 +20,7 @@ export interface PlacedSticker {
   scaleY: number
 }
 
-export type PhotoLayoutType = '2x2' | '1x4' | '4x1'
-
 export interface DecorateState {
-  layout: PhotoLayoutType
   stickers: PlacedSticker[]
   selectedStickerInstanceId: string | null
 }

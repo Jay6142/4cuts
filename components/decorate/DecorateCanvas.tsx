@@ -5,8 +5,9 @@ import { Stage, Layer, Rect, Image as KonvaImage, Text, Transformer } from 'reac
 import useImage from 'use-image'
 import Konva from 'konva'
 import { useAppStore } from '@/store'
-import { calculatePhotoLayout, getDisplayDimensions } from '@/lib/canvasUtils'
+import { getDisplayDimensions } from '@/lib/canvasUtils'
 import { getFramePhotoRects } from '@/lib/frameMetadata'
+import { getFrameSrc } from '@/lib/backgrounds'
 import { PlacedSticker } from '@/types/decorate'
 
 interface PhotoItemProps {
@@ -72,6 +73,7 @@ function StickerLayer({ stickers, selectedId, onSelect, onUpdate }: StickerLayer
       {stickers.map((sticker) => (
         <Text
           key={sticker.instanceId}
+          name="sticker"
           ref={(node) => {
             if (node) nodeRefs.current.set(sticker.instanceId, node)
             else nodeRefs.current.delete(sticker.instanceId)
@@ -139,7 +141,6 @@ export default function DecorateCanvas({ stageRef }: Props) {
     selectedSize,
     photos,
     selectedIndices,
-    layout,
     stickers,
     selectedStickerInstanceId,
     setSelectedStickerInstanceId,
@@ -151,15 +152,16 @@ export default function DecorateCanvas({ stageRef }: Props) {
     selectedSize.height
   )
 
+  const frameId = selectedSize.id === 'portrait-3x4' ? 'frame-01' : 'frame-02'
   const selectedPhotos = selectedIndices.map((i) => photos[i]).filter(Boolean)
-  const frameRects = getFramePhotoRects(selectedBackground.id, canvasWidth, canvasHeight)
-  const photoRects = frameRects ?? calculatePhotoLayout(layout, canvasWidth, canvasHeight)
+  const photoRects = getFramePhotoRects(frameId, canvasWidth, canvasHeight) ?? []
 
   const handleStageClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => {
-      if (e.target === e.target.getStage()) {
-        setSelectedStickerInstanceId(null)
-      }
+      const target = e.target
+      if (target.hasName('sticker')) return
+      if (target.getParent()?.className === 'Transformer') return
+      setSelectedStickerInstanceId(null)
     },
     [setSelectedStickerInstanceId]
   )
@@ -200,7 +202,7 @@ export default function DecorateCanvas({ stageRef }: Props) {
         {/* Layer 3: PNG 오버레이 프레임 */}
         {selectedBackground.type === 'image' && (
           <FrameOverlayLayer
-            src={selectedBackground.value}
+            src={getFrameSrc(selectedBackground.id, selectedSize.id)}
             width={canvasWidth}
             height={canvasHeight}
           />
